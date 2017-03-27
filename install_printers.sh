@@ -30,6 +30,18 @@ if [ -f /etc/debian_version ]; then
 		lpadmin -E -p $i -v lpd://print.cse.ohio-state.edu/$i -m $debSeries4700 -E
 	done
 
+	#Make all printers default set as Duplex printers allowing two-sided printing
+	echo "Setting printer options..."
+
+	#use 'lpoptions -p <printer_name> -l' to see all available options if other options need to be changed along with default Duplex
+
+	#if new array of printers is created, must append it to $allPrinters to apply duplex settings
+	allPrinters=( "${blkWhtPrinters[@]}" "${colorPrinters[@]}" )
+	for i in ${allPrinters[@]}
+	do
+		#use lpadmin rather than lpoptions due to where changes are made
+		lpadmin -p $i -o HPOption_Duplexer=True
+	done
 	echo "Done."
 
 elif [ -f /etc/redhat-release ]; then
@@ -51,9 +63,22 @@ elif [ -f /etc/redhat-release ]; then
 		lpadmin -E -p $i -v lpd://print.cse.ohio-state.edu/$i -m $rpmSeries4700 -E
 	done
 	
-	echo "Done."	
-	
+	#Make all printers default set as Duplex printers allowing two-sided printing
+	echo "Setting printer options..."
+
+	#use 'lpoptions -p <printer_name> -l' to see all available options if other options need to be changed along with default Duplex
+
+	#if new array of printers is created, must append it to $allPrinters to apply duplex settings
+	allPrinters=( "${blkWhtPrinters[@]}" "${colorPrinters[@]}" )
+	for i in ${allPrinters[@]}
+	do
+		#use lpadmin rather than lpoptions due to where changes are made
+		lpadmin -p $i -o HPOption_Duplexer=True
+	done
+	echo "Done."
+
 else
 	echo "Operating System is not supported by this script."
 fi
+
 
